@@ -6,9 +6,9 @@
 </description>
     <link>http://spaghetti.ga/</link>
     <atom:link href="http://spaghetti.ga/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 19 Mar 2016 13:02:00 +0800</pubDate>
-    <lastBuildDate>Sat, 19 Mar 2016 13:02:00 +0800</lastBuildDate>
-    <generator>Jekyll v3.0.2</generator>
+    <pubDate>Sun, 20 Mar 2016 23:47:14 +0800</pubDate>
+    <lastBuildDate>Sun, 20 Mar 2016 23:47:14 +0800</lastBuildDate>
+    <generator>Jekyll v3.1.2</generator>
     
       <item>
         <title>Javascript 类型判断方法!</title>

@@ -6,9 +6,9 @@ categories: jekyll update
 tags:
 - javascript
 ---
-#判断js变量类型的三个方法
+# 判断js变量类型的三个方法
 
-####1. 使用Object.prototype.toString.call(val)
+#### 1. 使用Object.prototype.toString.call(val)
 {% highlight ruby %}
     console.log(Object.prototype.toString.call(true)); //[object Boolean]
     console.log(Object.prototype.toString.call(3)); //[object Number]
@@ -24,7 +24,7 @@ tags:
 {% endhighlight %}
 
 
-####2. 使用val.constructor的方法
+#### 2. 使用val.constructor的方法
 {% highlight ruby %}
 
     var num = 3;
@@ -46,7 +46,7 @@ tags:
 至于为什么不用typeof呢?这是因为对于数组, typeof的结果会很奇怪:
 
 
-####3. 使用typeof
+#### 3. 使用typeof
 {% highlight ruby %}
     console.log(typeof true); // boolean
     console.log(typeof 3); // number
