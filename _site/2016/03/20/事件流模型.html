@@ -1,0 +1,200 @@
+
+<p>#事件流模型
+DOM(文档对象模型)结构是一个树型结构，当一个HTML元素产生一个事件时，该事件会在元素结点与根节点之间按特定的顺序传播，路径所经过的节点都会收到该事件，这个传播过程可称为DOM事件流。</p>
+
+<p>###冒泡型事件(Event Bubbling)
+这是IE浏览器对事件模型的实现，也是最容易理解的，至少笔者觉得比较符合实际的。冒泡，顾名思义，事件像个水中的气泡一样一直往上冒，直到顶端。从
+DOM树型结构上理解，就是事件由叶子节点沿祖先结点一直向上传递直到根节点；从浏览器界面视图HTML元素排列层次上理解就是事件由具有从属关系的最确定的目标元素一直传递到最不确定的目标元素.冒泡技术.冒泡型事件的基本思想,事件按照从特定的事件目标开始到最不确定的事件目标.
+###捕获型事件(Event Capturing)
+Netscape 的实现，它与冒泡型刚好相反，由DOM树最顶层元素一直到最精确的元素，这个事件模型对于开发者来说（至少是我..）有点费解，因为直观上的理解应该如同冒泡型，事件传递应该由最确定的元素，即事件产生元素开始。</p>
+
+<p>###测试
+stylesheet:
+```</p>
+<style type="text/css">
+		div {
+			position: absolute;
+			top:50%;
+			left:50%;
+		}
+		.container {
+			width: 400px;
+			height: 400px;
+			margin-top: -200px;
+			margin-left: -200px;
+			background-color: #000000;
+		}
+		.container > div {
+			width: 200px;
+			height: 200px;
+			margin-top: -100px;
+			margin-left: -100px;	
+			background-color: #0000ff;
+		}
+		.container > div > div{
+			width: 100px;
+			height: 100px;
+			margin-top: -50px;
+			margin-left: -50px;
+			background-color: #00ff00;	
+		}
+		.container > div > div > div{
+			width: 50px;
+			height: 50px;
+			margin-top: -25px;
+			margin-left: -25px;
+			background-color: #ff0000;	
+		}
+
+	</style>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>1. addEventListener(event, callback, is_capture)
+
+addEventListener函数的第三个参数确定了该事件函数什么时候触发，true的时候采取事件捕获的方式，false的时候采取事件冒泡的方式。因为IE只有冒泡模型，为了兼容性，默认值为false。尽管IE没有这个函数，IE用的是attachEvent("onclick", callback)。
+
+
+1.1 不设置第三个参数
+
+
+</code></pre>
+</div>
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;body&gt;
+	&lt;div class="container"&gt;
+		&lt;div&gt;
+			&lt;div&gt;
+				&lt;div&gt;&lt;/div&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;script type="text/javascript"&gt;
+		var div = document.getElementsByTagName('div');
+		div[0].addEventListener('click', function(argument) {
+			console.log('black!');
+		});
+		div[1].addEventListener('click', function(argument) {
+			console.log('blue!');
+		});
+		div[2].addEventListener('click', function(argument) {
+			console.log('green!');
+		});
+		div[3].addEventListener('click', function(argument) {
+			console.log('red!');
+		});
+	&lt;/script&gt;
+&lt;/body&gt; ```
+</code></pre>
+</div>
+
+<p>点击中间红心方形，控制台输出：</p>
+
+<p><img src="./addEvent_default.png" alt="" /></p>
+
+<p>1.2 第三个参数为false时</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;script type="text/javascript"&gt;
+		var div = document.getElementsByTagName('div');
+		div[0].addEventListener('click', function(argument) {
+			console.log('black!');
+		}, false);
+		div[1].addEventListener('click', function(argument) {
+			console.log('blue!');
+		}, false);
+		div[2].addEventListener('click', function(argument) {
+			console.log('green!');
+		}, false);
+		div[3].addEventListener('click', function(argument) {
+			console.log('red!');
+		}, false);			
+	&lt;/script&gt;
+</code></pre>
+</div>
+<p>点击中间红心方形，控制台输出：
+<img src="./addEvent_false.png" alt="" /></p>
+
+<p>1.3 第三个参数为true时
+```
+<script type="text/javascript">
+		var div = document.getElementsByTagName('div');
+		div[0].addEventListener('click', function(argument) {
+			console.log('black!');
+		}, true);
+		div[1].addEventListener('click', function(argument) {
+			console.log('blue!');
+		}, true);
+		div[2].addEventListener('click', function(argument) {
+			console.log('green!');
+		}, true);
+		div[3].addEventListener('click', function(argument) {
+			console.log('red!');
+		}, true);			
+	</script></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>点击中间红心方形，控制台输出：
+![](./addEvent_true.png)
+
+
+2. onclick等传统绑定事件方式
+
+onclick,onmouseon等以“on”开头的时间监听函数都是采取冒泡时才触发：
+
+</code></pre>
+</div>
+<script type="text/javascript">
+		var div = document.getElementsByTagName('div');
+		div[0].onclick = function () {
+			console.log('black!');
+		}
+		div[1].onclick = function () {
+			console.log('blue!');
+		}
+		div[2].onclick = function () {
+			console.log('green!');
+		}
+		div[3].onclick = function () {
+			console.log('red!');
+		}
+</script>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>点击中间红心方形，控制台输出：
+![](./onclick.png)
+
+3. onclick和addEventListener同用
+
+</code></pre>
+</div>
+<script type="text/javascript">
+		var div = document.getElementsByTagName('div');
+		div[0].onclick = function () {
+			console.log('black!');
+		}
+		div[1].onclick = function () {
+			console.log('blue!');
+		}
+		div[2].onclick = function () {
+			console.log('green!');
+		}
+		div[3].onclick = function () {
+			console.log('red!');
+		}
+		
+
+		div[0].addEventListener('click', function(argument) {
+			console.log('black!');
+		}, true);
+		div[1].addEventListener('click', function(argument) {
+			console.log('blue!');
+		}, true);
+		div[2].addEventListener('click', function(argument) {
+			console.log('green!');
+		}, true);
+		div[3].addEventListener('click', function(argument) {
+			console.log('red!');
+		}, true);			
+	</script>
+
+<p>```</p>
+
+<p>点击中间红心方形，控制台输出:
+<img src="./onclick_add_true.png" alt="" /></p>
+
+<p>这个例子很好体现了浏览器的时间流模型，先从顶级节点往下进行事件捕获，然后再从底层节点往上进行事件冒泡。</p>
